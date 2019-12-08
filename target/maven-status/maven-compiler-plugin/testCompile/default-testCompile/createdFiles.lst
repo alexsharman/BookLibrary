@@ -1,0 +1,3 @@
+com\example\library\service\BooksTestSuite.class
+com\example\library\service\ReadersTestSuite.class
+com\example\library\LibraryMethodsTestSuite.class

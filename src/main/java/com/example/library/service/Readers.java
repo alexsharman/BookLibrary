@@ -6,11 +6,19 @@ import com.example.library.utils.DisplayFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.example.library.utils.StreamUtils.toSingleton;
 
 public class Readers {
 
-    private List<Reader> readers = new ArrayList<Reader>();
-    private DisplayFunctions displayFunctions = new DisplayFunctions();
+    private List<Reader> readers;
+    private DisplayFunctions displayFunctions;
+
+    public Readers(DisplayFunctions displayFunctions) {
+        this.readers = new ArrayList<>();
+        this.displayFunctions = displayFunctions;
+    }
 
     public Reader addReader(Reader reader) {
         readers.add(reader);
@@ -26,37 +34,32 @@ public class Readers {
     }
 
     public void displayReaders() {
-        displayFunctions.printReaders(this);
+        displayFunctions.printReaders(readers);
     }
 
     public Reader findReaderById(String id) {
-        for (Reader reader : readers) {
-            if (reader.getId() == id) {
-                return reader;
-            }
-        }
-        System.out.println("Reader not found!");
-        return null;
+        return readers.stream()
+                .filter(c -> c.getId() == id)
+                .collect(toSingleton());
     }
 
-    public Reader findReaderByNameAndSurname(String name, String surname) {
-        for (Reader reader : readers) {
-            if (reader.getName() == name && reader.getSurname() == surname) {
-                return reader;
-            }
+    public List<Reader> findReaderByNameAndSurname(String name, String surname) {
+        try {
+            return readers.stream()
+                    .filter(c -> c.getName().toLowerCase().contains(name.toLowerCase())
+                            && c.getSurname().toLowerCase().contains(surname.toLowerCase()))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            System.out.println("Something went wrong, please try again: " + e.getMessage());
+            return null;
         }
-        System.out.println("Reader not found!");
-        return null;
     }
 
     public Reader findReaderWithBook(Book book) {
-        for (Reader reader : readers) {
-            if(reader.getBorrowedBooks().contains(book)){
-                return reader;
-            }
-        }
-        System.out.println("Book not found in any Readers borrowed books!");
-    return null;
+        return readers.stream()
+                .filter(c -> c.getBorrowedBooks().stream().anyMatch(n -> n.getId() == book.getId()))
+                .collect(toSingleton());
     }
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.library.utils;
 
+import com.example.library.LibraryMethods;
 import com.example.library.models.Book;
 import com.example.library.models.Reader;
 import com.example.library.service.Books;
@@ -7,36 +8,97 @@ import com.example.library.service.Readers;
 import dnl.utils.text.table.TextTable;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class DisplayFunctions {
 
-    public Book createBookInput(Scanner input, Books books) {
+    private Scanner scanner;
+
+    public DisplayFunctions(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public void dispMenu() {
+        System.out.println("--------------------------------------------------------");
+        System.out.println("Enter 0 to Exit Application.");
+        System.out.println("Enter 1 to Add new Book.");
+        System.out.println("Enter 2 to Search a Book.");
+        System.out.println("Enter 3 to Show All Books.");
+        System.out.println();
+        System.out.println("Enter 4 to Register Reader.");
+        System.out.println("Enter 5 to Show All Readers.");
+        System.out.println();
+        System.out.println("Enter 6 to Check Out Book. ");
+        System.out.println("Enter 7 to Check In Book");
+        System.out.println("--------------------------------------------------------");
+        System.out.println("Please choose an option:");
+    }
+
+    public Book createBookInput( Books books) {
         System.out.println("Please input the books title:");
-        String name = input.next();
+        String name = scanner.next();
         System.out.println("Please input the books author:");
-        String author = input.next();
+        String author = scanner.next();
         System.out.println("Please input the books year:");
-        int year = input.nextInt();
+        int year = scannerGetInt();
         Book book = new Book(name, author, year);
         books.bookIsAvailable(book);
         return book;
     }
 
-    public Reader createReaderInput(Scanner input, Readers readers) {
+    public Reader createReaderInput( Readers readers) {
         System.out.println("Please input you Name:");
-        String name = input.next();
+        String name = scanner.next();
         System.out.println("Please input your Surname:");
-        String surname = input.next();
-        System.out.println("Please input the books year:");
-        int year = input.nextInt();
+        String surname = scanner.next();
         Reader newReader = new Reader(name, surname);
-        if(readers.findReaderByNameAndSurname(name, surname) != null){
+        if (readers.findReaderByNameAndSurname(name, surname) != null) {
             return newReader;
         } else {
             System.out.println("Reader already exists!");
             return null;
+        }
+    }
+
+    public String provideBookId() {
+        System.out.println("Please provide book id to return:");
+        return scanner.next();
+    }
+
+    public Book getBookByTitleInput(LibraryMethods libraryMethods) {
+        System.out.println("Choosing a book.");
+        System.out.println("Input book title:");
+        String title = scanner.next();
+        List<Book> foundBooks = libraryMethods.findBookByTitle(title);
+        if (foundBooks.size() > 1) {
+            System.out.println("Select book by sequence: ");
+            int bookSeq = scannerGetInt() - 1;
+            return foundBooks.get(bookSeq);
+        } else if (foundBooks.size() == 0) {
+            System.out.println("No Books found!");
+            return null;
+        } else {
+            return foundBooks.get(0);
+        }
+    }
+
+    public Reader getReaderByNameSurname(LibraryMethods libraryMethods) {
+        System.out.println("Input readers name:");
+        String name = scanner.next();
+        System.out.println("Input readers surname:");
+        String surname = scanner.next();
+        List<Reader> foundReaders = libraryMethods.findReaderByNameAndSurname(name, surname);
+        if (foundReaders.size() > 1) {
+            System.out.println("Select Reader by sequence: ");
+            int bookSeq = scannerGetInt() - 1;
+            return foundReaders.get(bookSeq);
+        } else if (foundReaders.size() == 0) {
+            System.out.printf("No Reader Found!");
+            return null;
+        } else {
+            return foundReaders.get(0);
         }
     }
 
@@ -104,7 +166,7 @@ public class DisplayFunctions {
                 unAvailable++;
             }
         }
-        List<Integer> res = new ArrayList<Integer>();
+        List<Integer> res = new ArrayList<>();
         res.add(available);
         res.add(unAvailable);
         return res;
@@ -119,8 +181,8 @@ public class DisplayFunctions {
         return headers;
     }
 
-    public void printReaders(Readers readers) {
-        TextTable tt = new TextTable(getReaderHeaders(), convertReadersToDataTable(readers.getReaders()));
+    public void printReaders(List<Reader> readers) {
+        TextTable tt = new TextTable(getReaderHeaders(), convertReadersToDataTable(readers));
         tt.printTable();
     }
 
@@ -133,6 +195,33 @@ public class DisplayFunctions {
             data[i][3] = readers.get(i).getBorrowedBooks().size();
         }
         return data;
+    }
+
+    public int getSearchChoiceOf2() {
+        int numTries = 0;
+        while (true) {
+            try {
+                return scannerGetInt();
+            } catch (Exception e) {
+                if (--numTries == 0) throw e;
+            }
+        }
+    }
+
+    private int scannerGetInt() {
+        boolean inputOk = false;
+        int res = 0;
+        while (!inputOk) {
+            try {
+                res = scanner.nextInt();
+                inputOk = true;
+            } catch (InputMismatchException e) {
+                System.err.println("That's not a number!");
+                scanner.nextLine();   // This discards input
+                scanner.reset();
+            }
+        }
+        return res;
     }
 
 }

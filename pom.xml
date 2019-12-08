@@ -3,13 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.example.library</groupId>
     <artifactId>library</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <packaging>jar</packaging>
     <name>Book Library</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -23,41 +25,33 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
+
     <build>
         <finalName>book_library</finalName>
         <plugins>
-
-            <!-- download source code in Eclipse, best practice -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>false</downloadJavadocs>
-                </configuration>
-            </plugin>
-
-            <!-- Make this jar executable -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <!-- DO NOT include log4j.properties file in your Jar -->
                     <excludes>
                         <exclude>**/log4j.properties</exclude>
                     </excludes>
                     <archive>
                         <manifest>
-                            <!-- Jar file entry point -->
-                            <mainClass>com.example.library.Library</mainClass>
+                            <mainClass>com.example.library.LibraryApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

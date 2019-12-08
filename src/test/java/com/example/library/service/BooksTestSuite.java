@@ -76,4 +76,10 @@ public class BooksTestSuite {
         Assert.assertTrue(foundBooks.size() == 1);
     }
 
+    @Test
+    public void testSearchByYearAndAuthorAndTitle() {
+        List<Book> foundBooks = books.searchByTitleAndAuthorAndYear("Freak", "Lev", 2005);
+        Assert.assertTrue(foundBooks.size() == 1);
+    }
+
 }

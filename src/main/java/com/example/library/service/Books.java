@@ -1,88 +1,73 @@
 package com.example.library.service;
 
-import com.example.library.utils.DisplayFunctions;
 import com.example.library.models.Book;
 import com.example.library.models.Reader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.example.library.utils.StreamUtils.toSingleton;
 
 public class Books {
 
-    private List<Book> books = new ArrayList<Book>();
-    private DisplayFunctions displayFunctions = new DisplayFunctions();
+    private List<Book> books = new ArrayList<>();
 
     public Boolean addBook(Book b) {
         return this.books.add(b);
+
     }
 
     public Book findBookById(String id) {
-        for (Book book : books) {
-            if (book.getId() == id) {
-                return book;
-            }
-        }
-        return null;
+        return books.stream()
+                .filter(c -> c.getId().toLowerCase().contains(id))
+                .collect(toSingleton());
     }
 
     public List<Book> searchByAuthorName(String authorName) {
-        List<Book> booksByAuthor = new ArrayList<Book>();
-        for (Book book : books) {
-            if (book.getAuthor().contains(authorName)) {
-                booksByAuthor.add(book);
-            }
-        }
-        displayFunctions.printBookTable(booksByAuthor);
-        return booksByAuthor;
+        return books.stream()
+                .filter(c -> c.getAuthor().contains(authorName))
+                .collect(Collectors.toList());
+    }
+
+    public Book findBookByAuthorName(String authorName) {
+        return books.stream()
+                .filter(c -> c.getAuthor().contains(authorName))
+                .collect(toSingleton());
     }
 
     public List<Book> searchByAuthorAndYear(String authorName, int year) {
-        List<Book> booksByAuthor = new ArrayList<Book>();
-        for (Book book : books) {
-            if (book.getAuthor().contains(authorName) && book.getYear() == year) {
-                booksByAuthor.add(book);
-            }
-        }
-        displayFunctions.printBookTable(booksByAuthor);
-        return booksByAuthor;
+        return books.stream()
+                .filter(c -> c.getAuthor().contains(authorName) && c.getYear() == year)
+                .collect(Collectors.toList());
     }
 
     public List<Book> searchByTitleAndAuthorAndYear(String title, String authorName, int year) {
-        List<Book> booksByAuthor = new ArrayList<Book>();
-        for (Book book : books) {
-            if (book.getAuthor().contains(authorName) && book.getYear() == year && book.getTitle() == title) {
-                booksByAuthor.add(book);
-            }
-        }
-        displayFunctions.printBookTable(booksByAuthor);
-        return booksByAuthor;
+        return books.stream()
+                .filter(c -> c.getAuthor().contains(authorName) && c.getTitle().contains(title) && c.getYear() == year)
+                .collect(Collectors.toList());
+    }
+
+    public Book findBookByTitleAndAuthorAndYear(String title, String authorName, int year) {
+        return books.stream()
+                .filter(c -> c.getAuthor().contains(authorName) && c.getTitle().contains(title) && c.getYear() == year)
+                .collect(toSingleton());
     }
 
     public List<Book> searchByTitleName(String title) {
-        List<Book> booksByTitle = new ArrayList<Book>();
-        for (Book book : books) {
-            if (book.getTitle().contains(title)) {
-                booksByTitle.add(book);
-            }
-        }
-        displayFunctions.printBookTable(booksByTitle);
-        return booksByTitle;
+        return books.stream()
+                .filter(c -> c.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
-    public void showAllBooks() {
-        displayFunctions.printBookTable(books);
+    public List<Book> showAllBooks() {
+        return books;
     }
 
     public List<Book> showAllBooksByAvailability(Boolean available) {
-        List<Book> availableBooks = new ArrayList<Book>();
-        for (Book book : books) {
-            if (book.getAvailability() == available) {
-                availableBooks.add(book);
-            }
-        }
-        displayFunctions.printBookTable(availableBooks);
-        return availableBooks;
+        return books.stream()
+                .filter(c -> c.getAvailability() == available)
+                .collect(Collectors.toList());
     }
 
     public void borrowBook(Book book, Reader reader) {
@@ -115,6 +100,5 @@ public class Books {
     public List<Book> getBooks() {
         return books;
     }
-
 
 }
