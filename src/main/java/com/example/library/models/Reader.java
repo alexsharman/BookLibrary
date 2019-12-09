@@ -9,7 +9,7 @@ public class Reader {
     private String id;
     private String Name;
     private String Surname;
-    private List<Book> borrowedBooks = new ArrayList();
+    private List<String> borrowedBooks = new ArrayList();
 
     public Reader(String name, String surname) {
         this.id = UUID.randomUUID().toString();
@@ -29,15 +29,15 @@ public class Reader {
         return Surname;
     }
 
-    public List<Book> getBorrowedBooks() {
+    public List<String> getBorrowedBooks() {
         return borrowedBooks;
     }
 
     public void addBook(Book book) {
-        this.borrowedBooks.add(book);
+        this.borrowedBooks.add(book.getId());
     }
 
-    public void removeBook(Book book){
+    public void removeBook(Book book) {
         this.borrowedBooks.remove(book);
     }
 

@@ -3,25 +3,65 @@ package com.example.library.service;
 import com.example.library.models.Book;
 import com.example.library.models.Reader;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.example.library.utils.StreamUtils.toSingleton;
 
 public class Books {
 
-    private List<Book> books = new ArrayList<>();
+    List<Book> books = new ArrayList<>();
+    private int counter = 0;
+    private Map<Integer, Book> booksById;
+    private Map<String, Set<String>> booksByAuthor;
+    private Map<Integer, Set<Integer>> booksByYear;
+    private Map<String, Set<String>> booksByTitle;
 
-    public Boolean addBook(Book b) {
-        return this.books.add(b);
-
+    public Book addBook(Book b) {
+        if (bookIsAvailable(b)) {
+            counter = counter++;
+            booksById.put(b.getId(), b);
+            booksByAuthor.putIfAbsent(b.getAuthor(), new HashSet<>());
+            booksByAuthor.get(b.getAuthor()).add(b.getAuthor());
+            booksByYear.putIfAbsent(b.getYear(), new HashSet<>());
+            booksByYear.get(b.getYear()).add(b.getYear());
+            booksByTitle.putIfAbsent(b.getTitle(), new HashSet<>());
+            booksByTitle.get(b.getTitle()).add(b.getTitle());
+        }
+        return b;
     }
 
-    public Book findBookById(String id) {
-        return books.stream()
-                .filter(c -> c.getId().toLowerCase().contains(id))
-                .collect(toSingleton());
+    public Boolean removeBook(Book b) {
+        if (bookIsAvailable(b)) {
+            booksById.remove(b.getId());
+            booksByAuthor.get(b.getAuthor()).remove(b.getId());
+            booksByYear.get(b.getYear()).remove(b.getYear());
+            booksByTitle.get(b.getTitle()).remove(b.getTitle());
+            return true;
+        } else {
+            System.out.println("Book is not available.");
+            return false;
+        }
+    }
+
+    private List<Book> getBoooksById(List<Integer> ids) {
+        List<Book> foundBooks = new ArrayList<>();
+        try {
+            for (Integer id : ids) {
+                foundBooks.add(books.get(id));
+            }
+            return foundBooks;
+        } catch (Exception e) {
+            System.out.println("Book not found with id" + e.getMessage());
+            return null;
+        }
+    }
+
+    public List<Book> findBookById(Set<Integer> id) {
+        Set<Book> byId = booksById.getOrDefault(id, Book);
+        Set<Book> foundBooks = new HashSet(byId);
+        foundBooks.retainAll(byId);
+        return getBoooksById(foundBooks.toArray());
     }
 
     public List<Book> searchByAuthorName(String authorName) {
@@ -43,9 +83,16 @@ public class Books {
     }
 
     public List<Book> searchByTitleAndAuthorAndYear(String title, String authorName, int year) {
-        return books.stream()
-                .filter(c -> c.getAuthor().contains(authorName) && c.getTitle().contains(title) && c.getYear() == year)
-                .collect(Collectors.toList());
+//        return books.stream()
+//                .filter(c -> c.getAuthor().contains(authorName) && c.getTitle().contains(title) && c.getYear() == year)
+//                .collect(Collectors.toList());
+        Set<String> byAuthor = booksByAuthor.getOrDefault(authorName, new HashSet<String>()); // to sprawi, że nie dostaniemy nulla i nie wywalimy się z wyjątkiem
+        Set<String> byTitle = booksByTitle.getOrDefault(title, new HashSet<String>());
+        Set<Integer> byYear = booksByYear.getOrDefault(year, new HashSet<Integer>());
+        Set<String> foundBooks = new HashSet(byAuthor); // tu ważne - potrzebujemy kopii zbioru id książek tego autora inaczej zbiór w booksByAuthor by się zepsuł
+        foundBooks.retainAll(byTitle); // to wylicza część wspólną zbiorów
+        foundBooks.retainAll(byYear);
+        return getBooksById(foundBooks);
     }
 
     public Book findBookByTitleAndAuthorAndYear(String title, String authorName, int year) {
@@ -84,15 +131,6 @@ public class Books {
         if (books.contains(book) && book.getAvailability()) {
             return true;
         } else {
-            return false;
-        }
-    }
-
-    public Boolean removeBook(Book book) {
-        if (bookIsAvailable(book)) {
-            return books.remove(book);
-        } else {
-            System.out.println("Book is not available.");
             return false;
         }
     }

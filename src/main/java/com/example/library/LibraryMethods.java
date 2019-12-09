@@ -8,19 +8,16 @@ import com.example.library.utils.DisplayFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class LibraryMethods {
 
     private static Books books = new Books();
     private Readers readers;
-    private Scanner scanner;
     private DisplayFunctions displayFunctions;
 
-    public LibraryMethods(Scanner scanner) {
-        this.scanner = scanner;
-        this.displayFunctions = new DisplayFunctions(scanner);
-        this.readers   = new Readers(displayFunctions);
+    public LibraryMethods() {
+        this.displayFunctions = new DisplayFunctions();
+        this.readers = new Readers();
     }
 
     public void addBook(Book book) {
@@ -39,7 +36,7 @@ public class LibraryMethods {
     }
 
     public void displayAllReaders() {
-        readers.displayReaders();
+        displayFunctions.printReaders(readers.getReaders());
     }
 
     public List<Book> findBookByTitle(String title) {
@@ -56,8 +53,10 @@ public class LibraryMethods {
         return books.showAllBooksByAvailability(false);
     }
 
-    public void lendBookToReader(Book book, Reader reader) {
-        books.borrowBook(book, reader);
+    public void lendBookToReader(String bookId, String readerSurname) {
+        Book lBook = books.findBookById(bookId);
+        Reader lReader = readers.findReaderBySurname(readerSurname);
+        books.borrowBook(lBook, lReader);
     }
 
     public void returnBook(String bookId) {

@@ -15,7 +15,7 @@ public class ReadersTestSuite {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
-    private Readers readers = new Readers(new DisplayFunctions(new Scanner(System.in)));
+    private Readers readers = new Readers();
 
     @Before
     public void runBeforeTests() {
@@ -43,9 +43,9 @@ public class ReadersTestSuite {
     }
 
     @Test
-    public void testDisplayReaders() {
-        readers.displayReaders();
-        Assert.assertNotNull(outContent.toString());
+    public void testGetAllReaders() {
+        readers.getReaders();
+        Assert.assertTrue(!readers.getReaders().isEmpty());
     }
 
     @Test

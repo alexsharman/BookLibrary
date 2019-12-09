@@ -14,11 +14,10 @@ import java.util.Scanner;
 
 public class LibraryMethodsTestSuite {
 
-    private final Scanner scanner = new Scanner(System.in);
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
-    private LibraryMethods library = new LibraryMethods(scanner);
-    private DisplayFunctions displayFunctions = new DisplayFunctions(scanner);
+    private LibraryMethods library = new LibraryMethods();
+    private DisplayFunctions displayFunctions = new DisplayFunctions();
 
     @Before
     public void runBeforeTests() {
@@ -36,9 +35,6 @@ public class LibraryMethodsTestSuite {
 
     @After
     public void restoreStreams() {
-//        for (Book book : library.displayAllBooks()) {
-//            library.removeBookById(book.getId());
-//        }
         System.setOut(originalOut);
     }
 

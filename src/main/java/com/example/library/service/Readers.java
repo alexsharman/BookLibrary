@@ -2,7 +2,6 @@ package com.example.library.service;
 
 import com.example.library.models.Book;
 import com.example.library.models.Reader;
-import com.example.library.utils.DisplayFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +12,9 @@ import static com.example.library.utils.StreamUtils.toSingleton;
 public class Readers {
 
     private List<Reader> readers;
-    private DisplayFunctions displayFunctions;
 
-    public Readers(DisplayFunctions displayFunctions) {
+    public Readers() {
         this.readers = new ArrayList<>();
-        this.displayFunctions = displayFunctions;
     }
 
     public Reader addReader(Reader reader) {
@@ -33,13 +30,15 @@ public class Readers {
         return readers;
     }
 
-    public void displayReaders() {
-        displayFunctions.printReaders(readers);
-    }
-
     public Reader findReaderById(String id) {
         return readers.stream()
                 .filter(c -> c.getId() == id)
+                .collect(toSingleton());
+    }
+
+    public Reader findReaderBySurname(String surname) {
+        return readers.stream()
+                .filter(c -> c.getSurname() == surname)
                 .collect(toSingleton());
     }
 
@@ -60,6 +59,5 @@ public class Readers {
                 .filter(c -> c.getBorrowedBooks().stream().anyMatch(n -> n.getId() == book.getId()))
                 .collect(toSingleton());
     }
-
 
 }

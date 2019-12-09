@@ -1,24 +1,23 @@
 package com.example.library.models;
 
-import java.util.UUID;
 
 public class Book {
-    private final String id;
+    private final int id;
     private final String title;
     private final String author;
-    private final int year;
+    private final Integer year;
     private Boolean availability;
     private String readerId;
 
-    public Book(String title, String author, int year) {
-        this.id = UUID.randomUUID().toString();
+    public Book(int id, String title, String author, int year) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.year = year;
         this.availability = true;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -41,7 +40,7 @@ public class Book {
         this.availability = availability;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
