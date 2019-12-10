@@ -12,23 +12,25 @@ public class DisplayFunctions {
 
 
     private String[] getBookHeaders() {
-        String[] headers = new String[5];
+        String[] headers = new String[6];
         headers[0] = "id";
         headers[1] = "Title";
         headers[2] = "Author";
         headers[3] = "Year";
         headers[4] = "Availability";
+        headers[5] = "Currently reading";
         return headers;
     }
 
     private Object[][] convertBookToDataTable(List<Book> books) {
-        Object[][] data = new Object[books.size()][5];
+        Object[][] data = new Object[books.size()][6];
         for (int i = 0; i < books.size(); i++) {
             data[i][0] = books.get(i).getId();
             data[i][1] = books.get(i).getTitle();
             data[i][2] = books.get(i).getAuthor();
             data[i][3] = books.get(i).getYear();
             data[i][4] = books.get(i).getAvailability();
+            data[i][5] = books.get(i).getReader();
         }
         return data;
     }

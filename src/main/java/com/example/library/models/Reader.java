@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This class represents a reader within the library
+ *
+ * @author Alex Sharman
+ */
+
 public class Reader {
 
     private String id;
@@ -37,14 +43,13 @@ public class Reader {
         this.borrowedBookIds.add(bookId);
     }
 
-    public void removeBook(Book book){
+    public void removeBook(Book book) {
         this.borrowedBookIds.remove(book);
     }
 
     @Override
     public String toString() {
         return "Reader{" +
-                "id='" + id + '\'' +
                 ", Name='" + Name + '\'' +
                 ", Surname='" + Surname + '\'' +
                 ", borrowedBookIds=" + borrowedBookIds +

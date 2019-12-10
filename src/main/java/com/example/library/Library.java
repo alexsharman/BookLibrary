@@ -4,6 +4,12 @@ import com.example.library.models.Book;
 
 import java.util.List;
 
+/**
+ * This interface complies to the needs of the task.
+ *
+ * @author Alex Sharman
+ */
+
 public interface Library {
 
     public void addBook(String title, String author, int year);
@@ -20,5 +26,5 @@ public interface Library {
 
     public void lendBookToReader(String bookId, String readerSurname);
 
-    public void showAllBooksWithDetails();
+    public void showBooksWithDetails(String bookId);
 }

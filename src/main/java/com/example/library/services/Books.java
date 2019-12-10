@@ -9,6 +9,13 @@ import java.util.stream.Collectors;
 
 import static com.example.library.utils.StreamUtils.toSingleton;
 
+/**
+ * This class manages the books within the library
+ * Allows to add, remove, search, borrow and return a book.
+ *
+ * @author Alex Sharman
+ */
+
 public class Books {
 
     private List<Book> books = new ArrayList<>();
@@ -74,7 +81,7 @@ public class Books {
         //Checks if book is available to borrow
         if (book.getAvailability()) {
             book.setAvailability(false);
-            book.setReader(reader.getId());
+            book.setReader(reader.toString());
             reader.addBook(book.getId());
         } else {
             System.out.println("Book is not available!");

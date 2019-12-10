@@ -10,6 +10,13 @@ import java.util.stream.Collectors;
 
 import static com.example.library.utils.StreamUtils.toSingleton;
 
+/**
+ * This class manages the readers within the library
+ * Allows to add, remove and search.
+ *
+ * @author Alex Sharman
+ */
+
 public class Readers {
 
     private List<Reader> readers;
@@ -22,7 +29,7 @@ public class Readers {
 
     public Reader addReader(Reader reader) {
         //as we have no constraints on the list of readers i am making sure we can only have one with the same surname
-        if(!checkIfReaderExistsWithSameSurname(reader.getSurname())){
+        if (!checkIfReaderExistsWithSameSurname(reader.getSurname())) {
             readers.add(reader);
         } else {
             System.out.println("Reader already exists!");
@@ -61,8 +68,8 @@ public class Readers {
     }
 
     public Reader findReaderBySurname(String surname) {
-        for (Reader reader: readers             ) {
-            if(reader.getSurname().contains(surname)){
+        for (Reader reader : readers) {
+            if (reader.getSurname().contains(surname)) {
                 return reader;
             }
         }

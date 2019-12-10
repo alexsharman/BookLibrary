@@ -2,13 +2,19 @@ package com.example.library.models;
 
 import java.util.UUID;
 
+/**
+ * This class represents a book within the library
+ *
+ * @author Alex Sharman
+ */
+
 public class Book {
     private final String id;
     private final String title;
     private final String author;
     private final int year;
     private Boolean availability;
-    private String readerId;
+    private String ReaderAsString;
 
     public Book(String title, String author, int year) {
         this.id = UUID.randomUUID().toString();
@@ -35,7 +41,7 @@ public class Book {
     }
 
     public void setAvailability(Boolean availability) {
-        if(availability){
+        if (availability) {
             this.setReader(null);
         }
         this.availability = availability;
@@ -46,11 +52,11 @@ public class Book {
     }
 
     public String getReader() {
-        return readerId;
+        return ReaderAsString;
     }
 
-    public void setReader(String readerId) {
-        this.readerId = readerId;
+    public void setReader(String readerAsString) {
+        this.ReaderAsString = readerAsString;
     }
 
     @Override
@@ -61,7 +67,7 @@ public class Book {
                 ", author='" + author + '\'' +
                 ", year=" + year +
                 ", availability=" + availability +
-                ", reader=" + readerId +
+                ", reader=" + ReaderAsString +
                 '}';
     }
 }

@@ -7,7 +7,15 @@ import com.example.library.services.Readers;
 import com.example.library.utils.DisplayFunctions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+/**
+ * This class manages interactions between book and readers within the library
+ * Also handles displaying books, readers and stats.
+ *
+ * @author Alex Sharman
+ */
 
 public class LibraryMethods implements Library {
 
@@ -64,8 +72,8 @@ public class LibraryMethods implements Library {
         books.borrowBook(book, reader);
     }
 
-    public void showAllBooksWithDetails() {
-
+    public void showBooksWithDetails(String bookId) {
+        displayFunctions.printBookTable(Arrays.asList(books.findBookById(bookId)) );
     }
 
     public void returnBook(String bookId) {

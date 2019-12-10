@@ -63,7 +63,7 @@ public class LibraryMethodsTestSuite {
         library.addReader(reader2);
         library.lendBookToReader(foundBook.getId(), reader2.getSurname());
         //then
-        Assert.assertTrue(foundBook.getReader() == thisReader.getId());
+        Assert.assertTrue(foundBook.getReader() != thisReader.toString());
     }
 
     @Test
