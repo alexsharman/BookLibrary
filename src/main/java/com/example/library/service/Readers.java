@@ -56,7 +56,7 @@ public class Readers {
 
     public Reader findReaderWithBook(Book book) {
         return readers.stream()
-                .filter(c -> c.getBorrowedBooks().stream().anyMatch(n -> n.getId() == book.getId()))
+                .filter(c -> c.getBorrowedBooks().stream().anyMatch(n -> n.equals(book.getId())))
                 .collect(toSingleton());
     }
 

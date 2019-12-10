@@ -21,9 +21,9 @@ public class BooksTestSuite {
     public void runBeforeTests() {
         System.setOut(new PrintStream(outContent));
         books = new Books();
-        Book newBook = new Book("Freakanomics", "Levitt&Dubner", 2005);
-        Book newBook2 = new Book("Freakanomics2", "Levitt&Dubner", 2012);
-        Book newBook3 = new Book("Mission to Tashkent", "F.M. Bailey", 1946);
+        Book newBook = new Book(1,"Freakanomics", "Levitt&Dubner", 2005);
+        Book newBook2 = new Book(2, "Freakanomics2", "Levitt&Dubner", 2012);
+        Book newBook3 = new Book(3,"Mission to Tashkent", "F.M. Bailey", 1946);
         books.addBook(newBook);
         books.addBook(newBook2);
         books.addBook(newBook3);
@@ -36,14 +36,14 @@ public class BooksTestSuite {
 
     @Test
     public void addBook() {
-        Book testBook = new Book("Test", "Test", 1999);
+        Book testBook = new Book(4, "Test", "Test", 1999);
         books.addBook(testBook);
         Assert.assertNotNull(books.getBooks().contains(testBook));
     }
 
     @Test
     public void testRemoveBook() {
-        Book testBook = new Book("Test", "Test", 1999);
+        Book testBook = new Book(5, "Test", "Test", 1999);
         books.addBook(testBook);
         books.removeBook(testBook);
         Assert.assertTrue(!books.bookIsAvailable(testBook));

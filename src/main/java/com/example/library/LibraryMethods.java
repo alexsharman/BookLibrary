@@ -25,7 +25,7 @@ public class LibraryMethods {
     }
 
     public void removeBookById(String id) {
-        books.removeBook(books.findBookById(id));
+        books.removeBook(id);
     }
 
     public List<Book> displayAllBooks() {

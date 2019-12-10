@@ -12,7 +12,7 @@ public class Books {
 
     List<Book> books = new ArrayList<>();
     private int counter = 0;
-    private Map<Integer, Book> booksById;
+    private Map<String, Book> booksById;
     private Map<String, Set<String>> booksByAuthor;
     private Map<Integer, Set<Integer>> booksByYear;
     private Map<String, Set<String>> booksByTitle;
@@ -31,7 +31,8 @@ public class Books {
         return b;
     }
 
-    public Boolean removeBook(Book b) {
+    public Boolean removeBook(Integer bookId) {
+        Book b = getBooksByIds(Arrays.asList(bookId)).get(0); //only one being searched
         if (bookIsAvailable(b)) {
             booksById.remove(b.getId());
             booksByAuthor.get(b.getAuthor()).remove(b.getId());
@@ -44,7 +45,7 @@ public class Books {
         }
     }
 
-    private List<Book> getBoooksById(List<Integer> ids) {
+    private List<Book> getBooksByIds(List<Integer> ids) {
         List<Book> foundBooks = new ArrayList<>();
         try {
             for (Integer id : ids) {
@@ -57,11 +58,12 @@ public class Books {
         }
     }
 
-    public List<Book> findBookById(Set<Integer> id) {
-        Set<Book> byId = booksById.getOrDefault(id, Book);
-        Set<Book> foundBooks = new HashSet(byId);
-        foundBooks.retainAll(byId);
-        return getBoooksById(foundBooks.toArray());
+    public List<Book> findBookByTitleAndAuthorAndYear(String title, String authorName, int year) {
+        return getBooksByIds(findIdsByTitleAndAuthorAndYear(title, authorName, year));
+    }
+
+    public Set<String> findIdsByTitleAndAuthorAndYear(String title, String authorName, int year) {
+        return findIdsByTitleAndAuthor(title, author).retainAll(findIdsByYear(year));
     }
 
     public List<Book> searchByAuthorName(String authorName) {
@@ -83,22 +85,13 @@ public class Books {
     }
 
     public List<Book> searchByTitleAndAuthorAndYear(String title, String authorName, int year) {
-//        return books.stream()
-//                .filter(c -> c.getAuthor().contains(authorName) && c.getTitle().contains(title) && c.getYear() == year)
-//                .collect(Collectors.toList());
         Set<String> byAuthor = booksByAuthor.getOrDefault(authorName, new HashSet<String>()); // to sprawi, że nie dostaniemy nulla i nie wywalimy się z wyjątkiem
         Set<String> byTitle = booksByTitle.getOrDefault(title, new HashSet<String>());
         Set<Integer> byYear = booksByYear.getOrDefault(year, new HashSet<Integer>());
-        Set<String> foundBooks = new HashSet(byAuthor); // tu ważne - potrzebujemy kopii zbioru id książek tego autora inaczej zbiór w booksByAuthor by się zepsuł
+        Set<Integer> foundBooks = new HashSet(byAuthor); // tu ważne - potrzebujemy kopii zbioru id książek tego autora inaczej zbiór w booksByAuthor by się zepsuł
         foundBooks.retainAll(byTitle); // to wylicza część wspólną zbiorów
         foundBooks.retainAll(byYear);
-        return getBooksById(foundBooks);
-    }
-
-    public Book findBookByTitleAndAuthorAndYear(String title, String authorName, int year) {
-        return books.stream()
-                .filter(c -> c.getAuthor().contains(authorName) && c.getTitle().contains(title) && c.getYear() == year)
-                .collect(toSingleton());
+        return getBoooksById((foundBooks));
     }
 
     public List<Book> searchByTitleName(String title) {
@@ -121,7 +114,7 @@ public class Books {
         if (book.getAvailability()) {
             books.get(books.indexOf(book)).setAvailability(false);
             books.get(books.indexOf(book)).setReader(reader.getId());
-            reader.addBook(book);
+            reader.addBook(book.getId());
         } else {
             System.out.println("Book is not available!");
         }

@@ -33,8 +33,8 @@ public class Reader {
         return borrowedBooks;
     }
 
-    public void addBook(Book book) {
-        this.borrowedBooks.add(book.getId());
+    public void addBook(String bookId) {
+        this.borrowedBooks.add(bookId);
     }
 
     public void removeBook(Book book) {
