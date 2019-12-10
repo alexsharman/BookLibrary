@@ -12,7 +12,9 @@ import java.util.List;
 
 public interface Library {
 
-    public void addBook(String title, String author, int year);
+    public Boolean addBook(String title, String author, int year);
+
+    public Boolean addReader(String name, String surname);
 
     public void removeBookById(String BookId);
 
@@ -27,4 +29,5 @@ public interface Library {
     public void lendBookToReader(String bookId, String readerSurname);
 
     public void showBooksWithDetails(String bookId);
+
 }

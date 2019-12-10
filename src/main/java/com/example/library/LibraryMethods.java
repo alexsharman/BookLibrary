@@ -28,13 +28,18 @@ public class LibraryMethods implements Library {
         this.readers = new Readers();
     }
 
-    public void addBook(String title, String author, int year) {
+    public Boolean addBook(String title, String author, int year) {
         Book book = new Book(title, author, year);
         if (!books.bookIsAvailable(book)) {
-            books.addBook(book);
+            return books.addBook(book);
         } else {
             System.out.println("Book already exists!");
+            return false;
         }
+    }
+
+    public Boolean addReader(String name, String surname){
+        return readers.addReader(new Reader(name, surname));
     }
 
     public void removeBookById(String id) {

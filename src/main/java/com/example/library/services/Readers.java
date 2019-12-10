@@ -27,14 +27,14 @@ public class Readers {
         this.readers = new ArrayList<>();
     }
 
-    public Reader addReader(Reader reader) {
+    public Boolean addReader(Reader reader) {
         //as we have no constraints on the list of readers i am making sure we can only have one with the same surname
         if (!checkIfReaderExistsWithSameSurname(reader.getSurname())) {
-            readers.add(reader);
+            return readers.add(reader);
         } else {
             System.out.println("Reader already exists!");
+            return false;
         }
-        return reader;
     }
 
     public Boolean removeReader(Reader reader) {
