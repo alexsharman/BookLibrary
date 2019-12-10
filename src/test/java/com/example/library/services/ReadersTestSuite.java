@@ -1,7 +1,6 @@
-package com.example.library.service;
+package com.example.library.services;
 
 import com.example.library.models.Reader;
-import com.example.library.utils.DisplayFunctions;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,13 +8,12 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Scanner;
 
 public class ReadersTestSuite {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
-    private Readers readers = new Readers(new DisplayFunctions(new Scanner(System.in)));
+    private Readers readers = new Readers();
 
     @Before
     public void runBeforeTests() {

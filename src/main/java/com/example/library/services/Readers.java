@@ -1,4 +1,4 @@
-package com.example.library.service;
+package com.example.library.services;
 
 import com.example.library.models.Book;
 import com.example.library.models.Reader;
@@ -13,15 +13,20 @@ import static com.example.library.utils.StreamUtils.toSingleton;
 public class Readers {
 
     private List<Reader> readers;
-    private DisplayFunctions displayFunctions;
+    private DisplayFunctions displayFunctions = new DisplayFunctions();
 
-    public Readers(DisplayFunctions displayFunctions) {
+
+    public Readers() {
         this.readers = new ArrayList<>();
-        this.displayFunctions = displayFunctions;
     }
 
     public Reader addReader(Reader reader) {
-        readers.add(reader);
+        //as we have no constraints on the list of readers i am making sure we can only have one with the same surname
+        if(!checkIfReaderExistsWithSameSurname(reader.getSurname())){
+            readers.add(reader);
+        } else {
+            System.out.println("Reader already exists!");
+        }
         return reader;
     }
 
@@ -55,11 +60,28 @@ public class Readers {
         }
     }
 
+    public Reader findReaderBySurname(String surname) {
+        for (Reader reader: readers             ) {
+            if(reader.getSurname().contains(surname)){
+                return reader;
+            }
+        }
+        throw new NullPointerException("Reader not found!");
+    }
+
     public Reader findReaderWithBook(Book book) {
         return readers.stream()
-                .filter(c -> c.getBorrowedBooks().stream().anyMatch(n -> n.getId() == book.getId()))
+                .filter(c -> c.getBorrowedBookIds().stream().anyMatch(n -> n == book.getId()))
                 .collect(toSingleton());
     }
 
+    private Boolean checkIfReaderExistsWithSameSurname(String surname) {
+        for (Reader reader : readers) {
+            if (reader.getSurname().contains(surname)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

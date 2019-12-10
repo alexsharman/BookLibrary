@@ -9,7 +9,7 @@ public class Reader {
     private String id;
     private String Name;
     private String Surname;
-    private List<Book> borrowedBooks = new ArrayList();
+    private List<String> borrowedBookIds = new ArrayList();
 
     public Reader(String name, String surname) {
         this.id = UUID.randomUUID().toString();
@@ -29,16 +29,16 @@ public class Reader {
         return Surname;
     }
 
-    public List<Book> getBorrowedBooks() {
-        return borrowedBooks;
+    public List<String> getBorrowedBookIds() {
+        return borrowedBookIds;
     }
 
-    public void addBook(Book book) {
-        this.borrowedBooks.add(book);
+    public void addBook(String bookId) {
+        this.borrowedBookIds.add(bookId);
     }
 
     public void removeBook(Book book){
-        this.borrowedBooks.remove(book);
+        this.borrowedBookIds.remove(book);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Reader {
                 "id='" + id + '\'' +
                 ", Name='" + Name + '\'' +
                 ", Surname='" + Surname + '\'' +
-                ", borrowedBooks=" + borrowedBooks +
+                ", borrowedBookIds=" + borrowedBookIds +
                 '}';
     }
 

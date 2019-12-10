@@ -1,8 +1,9 @@
 com\example\library\utils\DisplayFunctions.class
+com\example\library\services\Readers.class
 com\example\library\models\Book.class
 com\example\library\models\Reader.class
+com\example\library\Library.class
 com\example\library\utils\StreamUtils.class
-com\example\library\service\Books.class
 com\example\library\LibraryMethods.class
-com\example\library\service\Readers.class
+com\example\library\services\Books.class
 com\example\library\LibraryApp.class

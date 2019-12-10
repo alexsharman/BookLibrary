@@ -10,61 +10,58 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Scanner;
 
 public class LibraryMethodsTestSuite {
 
-    private final Scanner scanner = new Scanner(System.in);
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
-    private LibraryMethods library = new LibraryMethods(scanner);
-    private DisplayFunctions displayFunctions = new DisplayFunctions(scanner);
+    private LibraryMethods library = new LibraryMethods();
+    private DisplayFunctions displayFunctions = new DisplayFunctions();
 
     @Before
     public void runBeforeTests() {
         //given
         System.setOut(new PrintStream(outContent));
-        Book newBook = new Book("Freakanomics", "Levitt&Dubner", 2005);
-        Book newBook2 = new Book("Freakanomics2", "Levitt&Dubner", 2012);
-        Book newBook3 = new Book("Mission to Tashkent", "F.M. Bailey", 1946);
-        library.addBook(newBook);
-        library.addBook(newBook2);
-        library.addBook(newBook3);
+        library.addBook("Freakanomics", "Levitt&Dubner", 2005);
+        library.addBook("Freakanomics2", "Levitt&Dubner", 2012);
+        library.addBook("Mission to Tashkent", "F.M. Bailey", 1946);
         Reader reader1 = new Reader("Alex", "Sharman");
         library.addReader(reader1);
     }
 
     @After
     public void restoreStreams() {
-//        for (Book book : library.displayAllBooks()) {
-//            library.removeBookById(book.getId());
-//        }
         System.setOut(originalOut);
     }
 
     @Test
     public void testLendBookToReader() {
         //given
-        Book foundBook = library.searchByTitleName("Freakanomics2").get(0);
-        Reader thisReader = library.findReaderByNameAndSurname("Alex", "Sharman").get(0);
+        String title = "Freakanomics2";
+        String name = "Alex";
+        String surname = "Sharman";
+        Book foundBook = library.searchByTitleName(title).get(0);
+        Reader thisReader = library.findReaderByNameAndSurname(name, surname).get(0);
         //when
-        library.lendBookToReader(foundBook, thisReader);
+        library.lendBookToReader(foundBook.getId(), surname);
         //then
         Assert.assertTrue(library.borrowedBooks().contains(foundBook));
-        Assert.assertTrue(thisReader.getBorrowedBooks().contains(foundBook));
+        Assert.assertTrue(thisReader.getBorrowedBookIds().contains(foundBook.getId()));
     }
 
     @Test
     public void testLendBookToReaderNotAvailable() {
         //given
         String title = "Freakanomics2";
+        String name = "Alex";
+        String surname = "Sharman";
         Book foundBook = library.searchByTitleName(title).get(0);
-        Reader thisReader = library.findReaderByNameAndSurname("Alex", "Sharman").get(0);
-        library.lendBookToReader(foundBook, thisReader);
+        Reader thisReader = library.findReaderByNameAndSurname(name, surname).get(0);
+        library.lendBookToReader(foundBook.getId(), surname);
         //when
         Reader reader2 = new Reader("Test", "Teaser");
         library.addReader(reader2);
-        library.lendBookToReader(foundBook, reader2);
+        library.lendBookToReader(foundBook.getId(), reader2.getSurname());
         //then
         Assert.assertTrue(foundBook.getReader() == thisReader.getId());
     }
@@ -76,10 +73,9 @@ public class LibraryMethodsTestSuite {
         String author = "F.M. Bailey";
         int year = 1946;
         //when
-        Book foundBook = library.searchByTitleName(title).get(0);
         Reader thisReader = library.findReaderByNameAndSurname("Alex", "Sharman").get(0);
-        library.lendBookToReader(foundBook, thisReader);
         String bookId = library.findBook(title, author, year).get(0).getId();
+        library.lendBookToReader(bookId, thisReader.getSurname());
         library.returnBook(bookId);
         //then
         Assert.assertTrue(library.findBook("Mission to Tashkent", "F.M. Bailey", 1946).get(0).getAvailability());

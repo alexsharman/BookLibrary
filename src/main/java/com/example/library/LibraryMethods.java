@@ -2,29 +2,31 @@ package com.example.library;
 
 import com.example.library.models.Book;
 import com.example.library.models.Reader;
-import com.example.library.service.Books;
-import com.example.library.service.Readers;
+import com.example.library.services.Books;
+import com.example.library.services.Readers;
 import com.example.library.utils.DisplayFunctions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class LibraryMethods {
+public class LibraryMethods implements Library {
 
     private static Books books = new Books();
     private Readers readers;
-    private Scanner scanner;
     private DisplayFunctions displayFunctions;
 
-    public LibraryMethods(Scanner scanner) {
-        this.scanner = scanner;
-        this.displayFunctions = new DisplayFunctions(scanner);
-        this.readers   = new Readers(displayFunctions);
+    public LibraryMethods() {
+        this.displayFunctions = new DisplayFunctions();
+        this.readers = new Readers();
     }
 
-    public void addBook(Book book) {
-        books.addBook(book);
+    public void addBook(String title, String author, int year) {
+        Book book = new Book(title, author, year);
+        if (!books.bookIsAvailable(book)) {
+            books.addBook(book);
+        } else {
+            System.out.println("Book already exists!");
+        }
     }
 
     public void removeBookById(String id) {
@@ -56,8 +58,14 @@ public class LibraryMethods {
         return books.showAllBooksByAvailability(false);
     }
 
-    public void lendBookToReader(Book book, Reader reader) {
+    public void lendBookToReader(String bookId, String readerSurname) {
+        Book book = books.findBookById(bookId);
+        Reader reader = readers.findReaderBySurname(readerSurname);
         books.borrowBook(book, reader);
+    }
+
+    public void showAllBooksWithDetails() {
+
     }
 
     public void returnBook(String bookId) {
@@ -73,6 +81,18 @@ public class LibraryMethods {
 
     public List<Book> searchByTitleName(String title) {
         List<Book> foundBooks = books.searchByTitleName(title);
+        displayFunctions.printBookTable(new ArrayList<>(foundBooks));
+        return foundBooks;
+    }
+
+    public List<Book> searchByAuthorName(String author) {
+        List<Book> foundBooks = books.searchByAuthorName(author);
+        displayFunctions.printBookTable(new ArrayList<>(foundBooks));
+        return foundBooks;
+    }
+
+    public List<Book> searchByTitleAuthorYear(String title, String author, int year) {
+        List<Book> foundBooks = books.searchByTitleAndAuthorAndYear(title, author, year);
         displayFunctions.printBookTable(new ArrayList<>(foundBooks));
         return foundBooks;
     }

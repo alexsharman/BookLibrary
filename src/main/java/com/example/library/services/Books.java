@@ -1,4 +1,4 @@
-package com.example.library.service;
+package com.example.library.services;
 
 import com.example.library.models.Book;
 import com.example.library.models.Reader;
@@ -71,24 +71,22 @@ public class Books {
     }
 
     public void borrowBook(Book book, Reader reader) {
+        //Checks if book is available to borrow
         if (book.getAvailability()) {
-            books.get(books.indexOf(book)).setAvailability(false);
-            books.get(books.indexOf(book)).setReader(reader.getId());
-            reader.addBook(book);
+            book.setAvailability(false);
+            book.setReader(reader.getId());
+            reader.addBook(book.getId());
         } else {
             System.out.println("Book is not available!");
         }
     }
 
     public Boolean bookIsAvailable(Book book) {
-        if (books.contains(book) && book.getAvailability()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (books.contains(book) && book.getAvailability());
     }
 
     public Boolean removeBook(Book book) {
+        //checking to make sure book is available
         if (bookIsAvailable(book)) {
             return books.remove(book);
         } else {

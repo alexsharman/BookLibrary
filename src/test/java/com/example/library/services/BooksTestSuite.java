@@ -1,4 +1,4 @@
-package com.example.library.service;
+package com.example.library.services;
 
 import com.example.library.models.Book;
 import org.junit.After;
@@ -58,7 +58,7 @@ public class BooksTestSuite {
     @Test
     public void searchByTitle() {
         List<Book> foundBooks = books.searchByTitleName("Freakanomics");
-        Assert.assertTrue(foundBooks.size() == 2);
+        Assert.assertEquals(2, foundBooks.size());
     }
 
     @Test
@@ -66,20 +66,20 @@ public class BooksTestSuite {
         List<Book> foundBooks = books.searchByAuthorName("Levitt");
         List<Book> foundBooks2 = books.searchByAuthorName("Bailey");
 
-        Assert.assertTrue(foundBooks.size() == 2);
-        Assert.assertTrue(foundBooks2.size() == 1);
+        Assert.assertEquals(2, foundBooks.size());
+        Assert.assertEquals(1, foundBooks2.size());
     }
 
     @Test
     public void testSearchByYearAndAuthor() {
         List<Book> foundBooks = books.searchByAuthorAndYear("Levitt", 2005);
-        Assert.assertTrue(foundBooks.size() == 1);
+        Assert.assertEquals(1, foundBooks.size());
     }
 
     @Test
     public void testSearchByYearAndAuthorAndTitle() {
         List<Book> foundBooks = books.searchByTitleAndAuthorAndYear("Freak", "Lev", 2005);
-        Assert.assertTrue(foundBooks.size() == 1);
+        Assert.assertEquals(1, foundBooks.size());
     }
 
 }
